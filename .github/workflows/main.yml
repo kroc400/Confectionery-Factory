@@ -1,23 +1,22 @@
-# Самый простой и эффективный вариант
-name: 🚀 Deploy website
+name: 🚀 Deploy website on push
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
 
 jobs:
-  deploy:
+  web-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.SFTP_HOST }}
           username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
+          protocol: ftps
+          port: 21
           local-dir: ./
           server-dir: /
-          exclude: |
-            .git/
-            .github/
-            README.md
+          log-level: verbose
