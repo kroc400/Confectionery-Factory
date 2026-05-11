@@ -8,8 +8,8 @@
 </head>
 <body>
     <header>
-        <div class="container">
-            
+        <div class="logo-container">
+            <img src="/img/logo.png">
         </div>
 
         <div class="hd-right">
@@ -39,11 +39,62 @@
     
 
     <main class="content">
-    </main>
+<!-- #region banner -->
+        <div class="slider-container">
+            <div class="slider-track">
+                <div class="slide">
+                    <img src="./img/main-banner/main-banner.jfif">
+                </div>
+                <div class="slide">
+                    <img src="./img/main-banner/slide2.jfif">
+                </div>
+                <div class="slide">
+                    <img src="./img/main-banner/slide3.jfif">
+                </div>
+                <div class="slide">
+                    <img src="./img/main-banner/slide4.jfif">
+                </div>
+                <div class="slide">
+                    <img src="./img/main-banner/slide5.jfif">
+                </div>
+            </div>
+            
+            <button class="slider-btn prev-btn">❮</button>
+            <button class="slider-btn next-btn">❯</button>
+            
+            <div class="slider-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+<!--#endregion -->
 
+<!--#region brand info -->
+        <section class="brand-info-section">
+            <div class="brand-info-container">
+                <div class="brand-info-left">
+                    <H3>О бренде Сладость веков</H3>
+                    <a href="#">Узнать больше</a> 
+                </div>
+                <div class="brand-info-right">
+                    Основано в 1925 году. Одно из старейших кондитерских предприятий страны, где традиции мастерства воплощаются в каждом изделии.
+                </div>
+                   
+            </div>
+        </section>
+<!--#endregion -->
+
+
+    </main>
+        
     <footer>
     </footer>
 
+    <script src="backToTop.js"></script>
+    <script src="imageSlider.js"></script>
     <script src="burger.js"></script>
 
 </body>

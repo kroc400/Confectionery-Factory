@@ -265,36 +265,51 @@ body {
 }
 /*#endregion */
 
-/*region header */
+/*#region header */
+
+
 header {
-    height: 85px;
-    background-color: var(--color-red);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    position: relative;
-    z-index: 15;
+  height: 85px;
+  background-color: var(--color-red);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+  z-index: 15;
+}
+
+.logo-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo-container img{
+  height: 50px;
+  width: auto;
 }
 
 .hd-right
 .hd-burger{
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .hd-burger span{
-    position: relative;
-    background: #1A202C;
-    height: 3px;
-    width: 100%;
-    top: 0;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  background: var(--color-white);
+  height: 3px;
+  width: 100%;
+  top: 0;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .burger-menu{
@@ -375,12 +390,10 @@ header {
     text-transform: uppercase;
 }
 
-
-
-
-
-
 /*#endregion */
+
+
+
 
 /*#region footer */
 
@@ -388,4 +401,159 @@ header {
 
 /*#region index.html */
 
+/*#region main banner */
+
+.slider-container {
+    position: relative;
+    width: 100%;
+    height: 91vh;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.slider-track {
+    display: flex;
+    height: 100%;
+    transition: transform 0.9s ease-in-out;
+    
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%;
+}
+
+.slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Кнопки навигации */
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 12px 18px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+    z-index: 2;
+    
+}
+
+.slider-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.prev-btn {
+    left: 20px;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: .4;
+}
+
+.next-btn {
+    right: 20px;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: .4;
+}
+
+/* Точки индикаторы */
+.slider-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 2;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+}
+
+.dot.active {
+    background: white;
+    transform: scale(1.2);
+    
+}
+
+/*#endregion */
+
+/*#region brand-info */
+
+.brand-info-section {
+    min-height: 282px;
+    background-color: var(--color-red);
+    margin-top: 0;
+}
+
+.brand-info-container{
+  color: var(--color-white);
+  font-size: 18px;
+  display: flex;
+  padding: 50px;
+  align-items: flex-start; /* Выравнивание по центру по вертикали */
+  justify-content: center;
+  gap: 150px; /* Отступ между колонками */
+  margin: 0 auto;
+}
+
+.brand-info-left h3 {
+    color: var(--color-white);
+    font-size: 40px;
+    margin: 0 0 35px 0;
+}
+
+.brand-info-left a {
+    color: var(--color-white);
+    font-size: 18px;
+}
+
+.brand-info-right{
+  max-width: 560px;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+
+
+/*#endregion */
+
 /*#endregion  */
+
+
+/*#region media */
+@media (max-width: 768px){
+  .brand-info-container {
+    flex-direction: column;
+    align-items: center; /* На мобильных центрируем */
+    text-align: center;
+    gap: 30px;
+  }
+
+  .brand-info-left h3 {
+    margin: 0 0 10px 0;
+  }
+}
+/*#endregion */
