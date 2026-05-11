@@ -11,10 +11,10 @@ template.innerHTML = `
                 </div>
                 <div class="right-column">
                     <div class="links">
-                        <a href="#">История бренда</a>
-                        <a href="#">Наша продукция</a>
-                        <a href="#">Качество и ингредиенты</a>
-                        <a href="#">Часто задаваемые вопросы</a>
+                        <a href="brandHistory.html">История бренда</a>
+                        <a href="products.html">Наша продукция</a>
+                        <a href="qualityAndIngredients.html">Качество и ингредиенты</a>
+                        <a href="FAQ.html">Часто задаваемые вопросы</a>
                     </div>
                 </div>
             </div>

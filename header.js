@@ -20,10 +20,10 @@ template.innerHTML = `
         <div class="burger-container">
             <div class="burger-column">
                 <ul>
-                    <li><a href="#">История бренда</a></li>
-                    <li><a href="#">Наша продукция</a></li>
-                    <li><a href="#">Качество и ингредиенты</a></li>
-                    <li><a href="#">Часто задаваемые вопросы</a></li>
+                    <li><a href="brandHistory.html">История бренда</a></li>
+                    <li><a href="products.html">Наша продукция</a></li>
+                    <li><a href="qualityAndIngredients.html">Качество и ингредиенты</a></li>
+                    <li><a href="FAQ.html">Часто задаваемые вопросы</a></li>
                 </ul>
                 <div class="divic">Продукты, любимые с детства</div>
             </div>
