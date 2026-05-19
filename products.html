@@ -11,18 +11,22 @@
 
     <main class="content">
         <section class="products-section">
-            <div class="products-container">
-                <!-- Сюда динамически подгрузятся товары из БД -->
+            <div class="products-container" id="productsContainer">
+                <div class="loading">Загрузка товаров...</div>
             </div>
         </section>
     </main>
 
     <footer></footer>
 
-    <!-- ВАЖНО: все скрипты должны быть с type="module" или все без -->
     <script src="js/backToTop.js" type="module"></script>
     <script src="js/header.js" type="module"></script>
     <script src="js/footer.js" type="module"></script>
-    <script src="js/products.js" type="module"></script>
+    
+    <!-- Загрузка товаров -->
+    <script type="module">
+        import { loadProducts } from './js/loadProducts.js';
+        loadProducts('#productsContainer');
+    </script>
 </body>
 </html>

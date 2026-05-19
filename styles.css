@@ -1030,29 +1030,44 @@ form input {
 
   /*#region candy */
 .candy-section {
-      margin: 30px auto;
-      padding: 0 20px;
-  }
-  
-  .candy-container {
-      flex-direction: column;
-      gap: 30px;
-      padding: 25px;
-  }
-  
-  .candy-section-title {
-      font-size: 32px;
-  }
-  
-  .candy-description h3 {
-      font-size: 22px;
-      margin-top: 20px;
-  }
-  
-  .candy-description p {
-      font-size: 15px;
-      line-height: 1.6;
-  }
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.candy-container {
+    flex-direction: column;
+    gap: 30px;
+    padding: 25px;
+}
+
+.candy-section-title {
+    font-size: 32px;
+}
+
+.candy-description h3 {
+    font-size: 22px;
+    margin-top: 20px;
+}
+
+.candy-description p {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+.product-detail {
+    flex-direction: column;
+    padding: 20px;
+    gap: 30px;
+}
+
+.product-detail-title {
+    font-size: 32px;
+}
+
+.price-current {
+    font-size: 28px;
+}
   /*#endregion */
 }
 

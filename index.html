@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles.css">
-    <title></title>
+    <title>Сладость веков – Кондитерская фабрика</title>
 </head>
 <body>
     <header>
@@ -36,38 +36,23 @@
                     <li><a href="qualityAndIngredients.html">Качество и ингредиенты</a></li>
                     <li><a href="FAQ.html">Часто задаваемые вопросы</a></li>
                 </ul>
-
                 <div class="divic">Продукты, любимые с детства</div>
             </div>
         </div>
     </div>
 
-    
-
     <main class="content">
-<!-- #region banner -->
+        <!-- #region banner -->
         <div class="slider-container">
             <div class="slider-track">
-                <div class="slide">
-                    <img src="./img/main-banner/main-banner.jfif">
-                </div>
-                <div class="slide">
-                    <img src="./img/main-banner/slide2.jfif">
-                </div>
-                <div class="slide">
-                    <img src="./img/main-banner/slide3.jfif">
-                </div>
-                <div class="slide">
-                    <img src="./img/main-banner/slide4.jfif">
-                </div>
-                <div class="slide">
-                    <img src="./img/main-banner/slide5.jfif">
-                </div>
+                <div class="slide"><img src="./img/main-banner/main-banner.jfif"></div>
+                <div class="slide"><img src="./img/main-banner/slide2.jfif"></div>
+                <div class="slide"><img src="./img/main-banner/slide3.jfif"></div>
+                <div class="slide"><img src="./img/main-banner/slide4.jfif"></div>
+                <div class="slide"><img src="./img/main-banner/slide5.jfif"></div>
             </div>
-            
             <button class="slider-btn prev-btn">❮</button>
             <button class="slider-btn next-btn">❯</button>
-            
             <div class="slider-dots">
                 <span class="dot active"></span>
                 <span class="dot"></span>
@@ -76,9 +61,9 @@
                 <span class="dot"></span>
             </div>
         </div>
-<!--#endregion -->
+        <!--#endregion -->
 
-<!--#region brand info -->
+        <!-- #region brand info -->
         <section class="brand-info-section">
             <div class="brand-info-container">
                 <div class="brand-info-left">
@@ -88,12 +73,11 @@
                 <div class="brand-info-right">
                     Основано в 1925 году. Одно из старейших кондитерских предприятий страны, где традиции мастерства воплощаются в каждом изделии.
                 </div>
-                   
             </div>
         </section>
-<!--#endregion -->
+        <!--#endregion -->
 
-<!--#region brand-lozung-section -->
+        <!-- #region brand-lozung-section -->
         <section class="brand-lozung-section">
             <div class="brand-lozung-container">
                 <H3>Любимые продукты высшего качества</H3>
@@ -109,62 +93,14 @@
                 </div>
             </div>
         </section>
-<!--#endregion  -->
+        <!--#endregion  -->
         
+        <!-- ТОВАРЫ ЗАГРУЖАЮТСЯ ДИНАМИЧЕСКИ -->
         <section class="products-section">
-            <div class="products-container">
-                
-                <div class="product-item">
-                    <div class="product-image">
-                        <img src="./img/products/звездный_вальс.jfif">
-                    </div>
-                    <div class="product-content">
-                        <h3><a href="/starryWaltz.html">Звёздный вальс →</a></h3>
-                        <p>Шоколадные трюфели с бархатистой текстурой и нежнейшей начинкой.
-                            Покрыты тёмным шоколадом с россыпью съедобных золотых блёсток. 
-                            Вкусы: классический горький шоколад, кофейный, апельсиновый.</p>
-                    </div>
-                </div>
-                
-                <div class="product-item reverse">
-                    <div class="product-image">
-                        <img src="./img/products/медовый_луг.jfif">
-                    </div>
-                    <div class="product-content">
-                        <h3><a href="/honeyMeadow.html">Медовый луг →</a></h3>
-                        <p>Пралине с цельным фундуком и медово‑ореховой начинкой. 
-                        Покрыто молочным шоколадом. Натуральный мёд в составе придаёт 
-                        особый аромат и глубину вкуса.</p>
-                    </div>
-                </div>
-
-                <div class="product-item">
-                    <div class="product-image">
-                        <img src="./img/products/морской_бриз.jfif">
-                    </div>
-                    <div class="product-content">
-                        <h3><a href="/seaBreeze.html">Морской бриз →</a></h3>
-                        <p>Освежающие леденцы с морским йодом и натуральными
-                            экстрактами водорослей. Лёгкая солоноватость сочетается
-                            с нотами лимона и мяты. Форма конфет напоминает морские камешки.</p>
-                    </div>
-                </div>
-
-                <div class="product-item reverse">
-                    <div class="product-image">
-                        <img src="./img/products/бабушкины_сказки.jfif">
-                    </div>
-                    <div class="product-content">
-                        <h3><a href="/grandmotherTales.html">Бабушкины сказки →</a></h3>
-                        <p>Нежное суфле в тёмном шоколаде с фруктово‑ягодными вкусами.
-                            Традиционный рецепт 1950‑х годов, восстановленный по архивным
-                            записям фабрики. Вкусы: вишня‑черешня, чёрная смородина, малина‑ежевика.</p>
-                    </div>
-                </div>
+            <div class="products-container" id="productsContainer">
+                <div class="loading">Загрузка товаров...</div>
             </div>
         </section>
-
-
     </main>
         
     <footer>
@@ -191,6 +127,11 @@
     <script src="js/backToTop.js" type="module"></script>
     <script src="js/imageSlider.js" type="module"></script>
     <script src="js/burger.js" type="module"></script>
-
+    
+    <!-- Загрузка товаров -->
+    <script type="module">
+        import { loadProducts } from './js/loadProducts.js';
+        loadProducts('#productsContainer');
+    </script>
 </body>
 </html>
