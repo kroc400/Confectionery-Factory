@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- header и footer будут подгружены скриптами -->
+    <header></header>
+
     <main class="account-page">
         <div class="container">
             <div id="authSection" class="auth-section">
@@ -32,16 +33,28 @@
                     </form>
                 </div>
             </div>
+            
             <div id="accountSection" style="display: none;">
                 <h2>Добро пожаловать, <span id="userName"></span>!</h2>
+                <p>Роль: <strong><span id="userRole"></span></strong></p>
+                
+                <div class="admin-buttons" style="margin: 20px 0;">
+                    <button id="adminPanelBtn" class="admin-btn" style="display: none; background: #2c1810; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;">
+                        🛡️ Перейти в админ-панель
+                    </button>
+                </div>
+                
                 <div class="orders-history">
                     <h3>История заказов</h3>
                     <div id="ordersList"></div>
                 </div>
-                <button id="logoutBtn">Выйти</button>
+                <button id="logoutBtn" class="logout-btn" style="background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px;">
+                    Выйти
+                </button>
             </div>
         </div>
     </main>
+
     <script src="js/header.js" type="module"></script>
     <script src="js/footer.js" type="module"></script>
     <script src="js/account.js" type="module"></script>

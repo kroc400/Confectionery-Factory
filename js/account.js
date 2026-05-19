@@ -3,8 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const authSection = document.getElementById('authSection');
     const accountSection = document.getElementById('accountSection');
     const userNameSpan = document.getElementById('userName');
+    const userRoleSpan = document.getElementById('userRole');
     const ordersList = document.getElementById('ordersList');
     const logoutBtn = document.getElementById('logoutBtn');
+    const adminPanelBtn = document.getElementById('adminPanelBtn');
 
     // Переключение табов
     const tabBtns = document.querySelectorAll('.tab-btn');
@@ -72,7 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('userId', data.user.id);
                     localStorage.setItem('userName', data.user.name);
                     localStorage.setItem('isWholesale', data.user.is_wholesale);
-                    showAccount(data.user.name);
+                    localStorage.setItem('userRole', data.user.role);
+                    showAccount(data.user.name, data.user.role);
                     loadOrders();
                 } else {
                     alert('Ошибка входа: ' + (data.error || 'Неверные данные'));
@@ -84,10 +87,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function showAccount(name) {
+    function showAccount(name, role) {
         if (authSection) authSection.style.display = 'none';
         if (accountSection) accountSection.style.display = 'block';
         if (userNameSpan) userNameSpan.textContent = name;
+        if (userRoleSpan) {
+            userRoleSpan.textContent = role === 'admin' ? 'Администратор' : 'Покупатель';
+        }
+        
+        // Показываем кнопку админ-панели только для админов
+        if (adminPanelBtn) {
+            adminPanelBtn.style.display = role === 'admin' ? 'inline-block' : 'none';
+        }
     }
 
     async function loadOrders() {
@@ -128,14 +139,22 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.removeItem('userId');
             localStorage.removeItem('userName');
             localStorage.removeItem('isWholesale');
+            localStorage.removeItem('userRole');
             location.reload();
+        });
+    }
+
+    // Кнопка перехода в админ-панель
+    if (adminPanelBtn) {
+        adminPanelBtn.addEventListener('click', () => {
+            window.location.href = '/api/admin/admin.php';
         });
     }
 
     // Проверка существующей сессии
     const userId = localStorage.getItem('userId');
     if (userId) {
-        showAccount(localStorage.getItem('userName'));
+        showAccount(localStorage.getItem('userName'), localStorage.getItem('userRole'));
         loadOrders();
     }
 });

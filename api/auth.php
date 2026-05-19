@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $data['action'] ?? '';
     
     if ($action === 'register') {
+        // Проверка на существование пользователя
         $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$data['email']]);
         if ($stmt->fetch()) {
@@ -16,15 +17,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
         
+        // Хеширование пароля
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare("INSERT INTO users (email, password, name, phone) VALUES (?, ?, ?, ?)");
+        
+        // Создание пользователя (по умолчанию роль 'user')
+        $stmt = $pdo->prepare("INSERT INTO users (email, password, name, phone, role) VALUES (?, ?, ?, ?, 'user')");
         $stmt->execute([$data['email'], $hashedPassword, $data['name'], $data['phone']]);
         
         echo json_encode(['success' => true, 'user_id' => $pdo->lastInsertId()]);
     }
     
     if ($action === 'login') {
-        $stmt = $pdo->prepare("SELECT id, email, password, name, is_wholesale FROM users WHERE email = ?");
+        $stmt = $pdo->prepare("SELECT id, email, password, name, is_wholesale, role FROM users WHERE email = ?");
         $stmt->execute([$data['email']]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
