@@ -58,7 +58,7 @@ function initBurgerMenu() {
     }, 0);
 }
 
-// ========== ФУНКЦИЯ ОБНОВЛЕНИЯ СЧЁТЧИКА ==========
+// Функция обновления счётчика корзины (считает КОЛИЧЕСТВО ПОЗИЦИЙ, а не единиц)
 window.updateCartCounter = async function() {
     const userId = localStorage.getItem('userId');
     const counterSpan = document.getElementById('cartCount');
@@ -76,23 +76,18 @@ window.updateCartCounter = async function() {
         
         console.log('📦 Данные из API:', data);
         
-        // Определяем общее количество товаров
-        let totalItems = 0;
+        // Считаем КОЛИЧЕСТВО ПОЗИЦИЙ (разных товаров в корзине)
+        let positionCount = 0;
         
         if (Array.isArray(data)) {
-            // Если API вернуло массив
-            totalItems = data.reduce((sum, item) => sum + (item.quantity || 0), 0);
+            positionCount = data.length;
         } else if (data.items && Array.isArray(data.items)) {
-            // Если API вернуло объект с полем items
-            totalItems = data.items.reduce((sum, item) => sum + (item.quantity || 0), 0);
-        } else if (data.summary && data.summary.total) {
-            // Если API вернуло итоговую сумму
-            totalItems = data.items?.length || 0;
+            positionCount = data.items.length;
         }
         
         if (counterSpan) {
-            counterSpan.textContent = totalItems;
-            console.log('✅ Счётчик обновлён:', totalItems);
+            counterSpan.textContent = positionCount;
+            console.log('✅ Счётчик обновлён (позиций):', positionCount);
         }
     } catch (err) {
         console.error('❌ Ошибка обновления счётчика:', err);
