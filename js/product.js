@@ -75,18 +75,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         const description = (product.description || 'Описание отсутствует').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         
         const html = `
-            <div class="product-detail">
-                <div class="product-detail-image">
+            <div class="candy-container">
+                <div class="candy-left">
                     <img src="${product.image || '/img/products/default.jpg'}" alt="${product.name}" onerror="this.src='/img/products/default.jpg'">
                 </div>
-                <div class="product-detail-info">
-                    <h1 class="product-detail-title">${product.name}</h1>
-                    <div class="product-detail-price">
-                        <span class="price-current">${product.price} ₽</span>
-                        ${product.wholesale_min_qty > 0 ? `<span class="price-wholesale">от ${Math.round(product.price * (100 - product.wholesale_discount) / 100)} ₽ при опте</span>` : ''}
-                    </div>
-                    ${wholesaleHtml}
-                    <div class="product-detail-description">
+                <div class="candy-right">
+                    <div class="candy-section-title">${product.name}</div>
+                    <div class="candy-description">
+                        <h3>Цена: ${product.price} ₽</h3>
+                        ${product.wholesale_min_qty > 0 ? `<p>Опт: от ${product.wholesale_min_qty} шт — скидка ${product.wholesale_discount}%</p>` : ''}
                         <h3>Описание</h3>
                         <p>${description}</p>
                     </div>
