@@ -14,7 +14,7 @@
         }
     }
     
-    // Если не dev-режим – выходим
+    // Если не dev-режим – выходим (НЕ перехватываем запросы)
     if (!isDev) return;
 
     console.log('🛠️ DEV-режим включён – используются тестовые данные');
@@ -62,9 +62,7 @@
     const mockOrders = [
         { id: 156, user_name: 'Иван Петров', total_amount: 2450, status: 'completed', created_at: '2024-05-15 10:30:00' },
         { id: 155, user_name: 'Мария Смирнова', total_amount: 1280, status: 'processing', created_at: '2024-05-14 14:20:00' },
-        { id: 154, user_name: 'Алексей К.', total_amount: 3900, status: 'new', created_at: '2024-05-13 09:15:00' },
-        { id: 153, user_name: 'Елена В.', total_amount: 5600, status: 'completed', created_at: '2024-05-12 16:45:00' },
-        { id: 152, user_name: 'Дмитрий П.', total_amount: 890, status: 'cancelled', created_at: '2024-05-11 11:00:00' }
+        { id: 154, user_name: 'Алексей К.', total_amount: 3900, status: 'new', created_at: '2024-05-13 09:15:00' }
     ];
 
     const mockStats = {
@@ -74,225 +72,84 @@
         revenue: mockOrders.reduce((sum, o) => sum + o.total_amount, 0)
     };
 
-    // ========== ФУНКЦИЯ ДЛЯ ЗАПОЛНЕНИЯ АДМИНКИ ==========
-    function renderAdminPanel() {
-        // Проверяем, находимся ли мы на странице админки
-        const adminContent = document.querySelector('.admin-content');
-        if (!adminContent) return;
+    let currentMockUser = mockUsers[2];
+    let mockCart = JSON.parse(localStorage.getItem('dev_cart')) || [];
+
+    function saveMockCart() { localStorage.setItem('dev_cart', JSON.stringify(mockCart)); }
+    function updateMockCartCounter() { const c = document.getElementById('cartCount'); if (c) c.textContent = mockCart.length; }
+
+    // ========== ПЕРЕХВАТ FETCH ==========
+    const originalFetch = window.fetch;
+    window.fetch = async function(...args) {
+        let url = args[0];
+        if (typeof url !== 'string') url = url.url;
+        const urlStr = url;
+        const method = args[1]?.method || 'GET';
         
-        console.log('[DEV] Заполняем админ-панель мок-данными');
-        
-        // Получаем текущую страницу из URL или из data-атрибута
-        const urlParams = new URLSearchParams(window.location.search);
-        let page = urlParams.get('page') || 'dashboard';
-        
-        // Активные классы для меню
-        document.querySelectorAll('.admin-sidebar a').forEach(link => {
-            const linkPage = link.getAttribute('data-page');
-            if (linkPage === page) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-        
-        // Рендерим нужную страницу
-        switch(page) {
-            case 'dashboard':
-                adminContent.innerHTML = `
-                    <div class="top-bar">
-                        <h1 class="page-title">Панель управления</h1>
-                        <div class="user-info">
-                            <span>Администратор</span>
-                            <div class="avatar">A</div>
-                        </div>
-                    </div>
-                    <div class="stats-grid">
-                        <div class="stat-card"><div class="stat-number">${mockStats.users}</div><div>Пользователей</div><div class="stat-change">↑ 12% за месяц</div></div>
-                        <div class="stat-card"><div class="stat-number">${mockStats.products}</div><div>Товаров</div><div class="stat-change">+2 добавлено</div></div>
-                        <div class="stat-card"><div class="stat-number">${mockStats.orders}</div><div>Заказов</div><div class="stat-change">↑ 8% за месяц</div></div>
-                        <div class="stat-card"><div class="stat-number">${mockStats.revenue.toLocaleString()} ₽</div><div>Выручка</div><div class="stat-change">↑ 15% за месяц</div></div>
-                    </div>
-                    <div class="data-table">
-                        <h3>Последние заказы</h3>
-                        <table>
-                            <thead><tr><th>ID</th><th>Покупатель</th><th>Сумма</th><th>Статус</th><th>Дата</th><th></th></tr></thead>
-                            <tbody>
-                                ${mockOrders.slice(0, 5).map(order => `
-                                    <tr>
-                                        <td>#${order.id}</td>
-                                        <td>${order.user_name}</td>
-                                        <td>${order.total_amount.toLocaleString()} ₽</td>
-                                        <td>${getStatusBadge(order.status)}</td>
-                                        <td>${order.created_at}</td>
-                                        <td><button class="btn btn-primary">Детали</button></td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                break;
-                
-            case 'reports':
-                adminContent.innerHTML = `
-                    <div class="top-bar">
-                        <h1 class="page-title">📈 Отчёты и аналитика</h1>
-                        <div class="user-info">
-                            <span>Администратор</span>
-                            <div class="avatar">A</div>
-                        </div>
-                    </div>
-                    <div class="reports-grid">
-                        <div class="report-card">
-                            <h3>🏆 Топ-3 товаров</h3>
-                            <table style="width:100%">
-                                <tr><th>Товар</th><th>Продано</th><th>Выручка</th></tr>
-                                <tr><td>Звёздный вальс</td><td>145 шт</td><td>50 750 ₽</td></tr>
-                                <tr><td>Медовый луг</td><td>98 шт</td><td>41 160 ₽</td></tr>
-                                <tr><td>Бабушкины сказки</td><td>76 шт</td><td>29 640 ₽</td></tr>
-                            </table>
-                        </div>
-                        <div class="report-card">
-                            <h3>📅 Продажи по месяцам</h3>
-                            <table style="width:100%">
-                                <tr><th>Месяц</th><th>Заказов</th><th>Выручка</th></tr>
-                                <tr><td>Март 2024</td><td>32</td><td>45 600 ₽</td></tr>
-                                <tr><td>Апрель 2024</td><td>38</td><td>52 300 ₽</td></tr>
-                                <tr><td>Май 2024</td><td>28</td><td>36 400 ₽</td></tr>
-                            </table>
-                        </div>
-                        <div class="report-card">
-                            <h3>👑 Лучшие покупатели</h3>
-                            <table style="width:100%">
-                                <tr><th>Покупатель</th><th>Заказов</th><th>Потрачено</th></tr>
-                                <tr><td>Иван Петров</td><td>5</td><td>12 450 ₽</td></tr>
-                                <tr><td>Мария Смирнова</td><td>3</td><td>8 900 ₽</td></tr>
-                                <tr><td>Алексей К.</td><td>2</td><td>5 600 ₽</td></tr>
-                            </table>
-                        </div>
-                    </div>
-                `;
-                break;
-                
-            case 'users':
-                adminContent.innerHTML = `
-                    <div class="top-bar">
-                        <h1 class="page-title">👥 Управление пользователями</h1>
-                        <div class="user-info">
-                            <span>Администратор</span>
-                            <div class="avatar">A</div>
-                        </div>
-                    </div>
-                    <div class="data-table">
-                        <table>
-                            <thead><tr><th>ID</th><th>Email</th><th>Имя</th><th>Телефон</th><th>Оптовик</th><th>Роль</th><th>Дата регистрации</th></tr></thead>
-                            <tbody>
-                                ${mockUsers.map(user => `
-                                    <tr>
-                                        <td>${user.id}</td>
-                                        <td>${user.email}</td>
-                                        <td>${user.name}</td>
-                                        <td>${user.phone || '-'}</td>
-                                        <td>${user.is_wholesale ? '✅ Да' : '❌ Нет'}</td>
-                                        <td>${user.role === 'admin' ? '👑 Админ' : '👤 Пользователь'}</td>
-                                        <td>${user.created_at}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                break;
-                
-            case 'orders':
-                adminContent.innerHTML = `
-                    <div class="top-bar">
-                        <h1 class="page-title">📦 Управление заказами</h1>
-                        <div class="user-info">
-                            <span>Администратор</span>
-                            <div class="avatar">A</div>
-                        </div>
-                    </div>
-                    <div class="data-table">
-                        <table>
-                            <thead><tr><th>ID</th><th>Пользователь</th><th>Сумма</th><th>Статус</th><th>Дата</th><th></th></tr></thead>
-                            <tbody>
-                                ${mockOrders.map(order => `
-                                    <tr>
-                                        <td>#${order.id}</td>
-                                        <td>${order.user_name}</td>
-                                        <td>${order.total_amount.toLocaleString()} ₽</td>
-                                        <td>${getStatusBadge(order.status)}</td>
-                                        <td>${order.created_at}</td>
-                                        <td><button class="btn btn-sm">✏️</button> <button class="btn btn-sm btn-danger">🗑️</button></td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-                break;
-                
-            case 'forms':
-                adminContent.innerHTML = `
-                    <div class="top-bar">
-                        <h1 class="page-title">📝 Формы (ЛР №11)</h1>
-                        <div class="user-info">
-                            <span>Администратор</span>
-                            <div class="avatar">A</div>
-                        </div>
-                    </div>
-                    <div class="form-demo">
-                        <h2 style="margin-bottom: 20px;">Форма обратной связи</h2>
-                        <form id="feedbackForm">
-                            <div class="form-group"><label>Ваше имя</label><input type="text" name="name" required></div>
-                            <div class="form-group"><label>Email</label><input type="email" name="email" required></div>
-                            <div class="form-group">
-                                <label>Товар</label>
-                                <select name="product_id">
-                                    <option value="">-- Выберите товар --</option>
-                                    ${mockProducts.map(p => `<option value="${p.id}">${p.name} - ${p.price} ₽</option>`).join('')}
-                                </select>
-                            </div>
-                            <div class="form-group"><label>Количество</label><input type="number" name="quantity" value="1" min="1"></div>
-                            <div class="form-group"><label>Сообщение</label><textarea name="message" rows="4" required></textarea></div>
-                            <button type="submit" class="btn btn-primary">Отправить сообщение</button>
-                        </form>
-                        <div id="formResult" style="margin-top: 20px;"></div>
-                    </div>
-                `;
-                
-                // Обработка формы
-                const form = document.getElementById('feedbackForm');
-                if (form) {
-                    form.addEventListener('submit', (e) => {
-                        e.preventDefault();
-                        const resultDiv = document.getElementById('formResult');
-                        resultDiv.innerHTML = '<div style="padding: 15px; background: #d1fae5; border-radius: 12px; color: #059669;">✅ Сообщение отправлено! (демо-режим)</div>';
-                        form.reset();
-                        setTimeout(() => resultDiv.innerHTML = '', 3000);
-                    });
-                }
-                break;
-                
-            default:
-                adminContent.innerHTML = `<div class="top-bar"><h1 class="page-title">Страница не найдена</h1></div>`;
+        console.log(`[DEV] ${method} ${urlStr}`);
+
+        // API ТОВАРОВ
+        if (urlStr.includes('/api/products.php')) {
+            return new Response(JSON.stringify(mockProducts.map(p => ({ id: p.id, name: p.name, price: p.price, wholesale_min_qty: p.wholesale_min_qty, wholesale_discount: p.wholesale_discount, image: p.image, description: p.description }))), { status: 200, headers: { 'Content-Type': 'application/json' } });
         }
-    }
 
-    // Вспомогательная функция для статусов
+        // API ОДНОГО ТОВАРА
+        if (urlStr.includes('/api/product.php')) {
+            const idMatch = urlStr.match(/[?&]id=(\d+)/);
+            const id = idMatch ? parseInt(idMatch[1]) : 0;
+            const product = mockProducts.find(p => p.id === id) || { error: 'Товар не найден' };
+            return new Response(JSON.stringify(product), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+
+        // API КОРЗИНЫ GET
+        if (urlStr.includes('/api/cart.php') && method === 'GET') {
+            const cartItems = mockCart.map(item => {
+                const product = mockProducts.find(p => p.id === item.product_id);
+                if (!product) return null;
+                const isWholesale = currentMockUser.is_wholesale === 1;
+                const discount = isWholesale || item.quantity >= product.wholesale_min_qty ? product.wholesale_discount : 0;
+                const finalPrice = product.price * (100 - discount) / 100;
+                return { product_id: item.product_id, name: product.name, quantity: item.quantity, price: product.price, final_price: Math.round(finalPrice * 100) / 100, discount_saved: discount > 0 ? (product.price - finalPrice) * item.quantity : 0, discount_percent: discount };
+            }).filter(Boolean);
+            const subtotal = cartItems.reduce((s, i) => s + i.price * i.quantity, 0);
+            const total = cartItems.reduce((s, i) => s + i.final_price * i.quantity, 0);
+            return new Response(JSON.stringify({ items: cartItems, summary: { subtotal, discount: subtotal - total, total, is_wholesale_user: currentMockUser.is_wholesale === 1 } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+
+        // API КОРЗИНЫ POST
+        if (urlStr.includes('/api/cart.php') && method === 'POST') {
+            const body = JSON.parse(args[1]?.body || '{}');
+            const existing = mockCart.find(i => i.product_id === body.product_id);
+            if (existing) existing.quantity += body.quantity;
+            else mockCart.push({ product_id: body.product_id, quantity: body.quantity });
+            saveMockCart(); updateMockCartCounter();
+            return new Response(JSON.stringify({ success: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+
+        // API АВТОРИЗАЦИИ
+        if (urlStr.includes('/api/auth.php')) {
+            const body = JSON.parse(args[1]?.body || '{}');
+            if (body.action === 'login') {
+                const user = mockUsers.find(u => u.email === body.email);
+                if (user && body.password === '123') {
+                    currentMockUser = user;
+                    const { password, ...userWithoutPassword } = user;
+                    return new Response(JSON.stringify({ success: true, user: userWithoutPassword }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+                }
+                return new Response(JSON.stringify({ error: 'Неверный email или пароль (dev: используйте 123)' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+            }
+        }
+
+        // Остальные запросы – пробрасываем
+        return originalFetch.apply(this, args);
+    };
+
+    // ========== ФУНКЦИИ ДЛЯ АДМИН-ПАНЕЛИ ==========
     function getStatusBadge(status) {
-        const statusMap = {
-            'new': '<span class="status-badge status-new">🟡 Новый</span>',
-            'processing': '<span class="status-badge status-processing">🔵 В обработке</span>',
-            'completed': '<span class="status-badge status-completed">✅ Завершён</span>',
-            'cancelled': '<span class="status-badge status-cancelled">❌ Отменён</span>'
-        };
-        return statusMap[status] || status;
+        const map = { 'new': '<span class="status-badge status-new">🟡 Новый</span>', 'processing': '<span class="status-badge status-processing">🔵 В обработке</span>', 'completed': '<span class="status-badge status-completed">✅ Завершён</span>', 'cancelled': '<span class="status-badge status-cancelled">❌ Отменён</span>' };
+        return map[status] || status;
     }
 
-    // Добавляем стили для админки, если их нет
     function addAdminStyles() {
         if (document.getElementById('dev-admin-styles')) return;
         const style = document.createElement('style');
@@ -333,22 +190,58 @@
         document.head.appendChild(style);
     }
 
+    function renderAdminPanel() {
+        const adminContent = document.querySelector('.admin-content');
+        if (!adminContent) return;
+        
+        console.log('[DEV] Заполняем админ-панель мок-данными');
+        
+        const page = new URLSearchParams(window.location.search).get('page') || 'dashboard';
+        
+        document.querySelectorAll('.admin-sidebar a').forEach(link => {
+            const linkPage = link.getAttribute('data-page');
+            if (linkPage === page) link.classList.add('active');
+            else link.classList.remove('active');
+        });
+        
+        switch(page) {
+            case 'dashboard':
+                adminContent.innerHTML = `<div class="top-bar"><h1 class="page-title">Панель управления</h1><div class="user-info"><span>Администратор</span><div class="avatar">A</div></div></div><div class="stats-grid"><div class="stat-card"><div class="stat-number">${mockStats.users}</div><div>Пользователей</div></div><div class="stat-card"><div class="stat-number">${mockStats.products}</div><div>Товаров</div></div><div class="stat-card"><div class="stat-number">${mockStats.orders}</div><div>Заказов</div></div><div class="stat-card"><div class="stat-number">${mockStats.revenue.toLocaleString()} ₽</div><div>Выручка</div></div></div><div class="data-table"><h3>Последние заказы</h3><table><thead><tr><th>ID</th><th>Покупатель</th><th>Сумма</th><th>Статус</th><th>Дата</th></tr></thead><tbody>${mockOrders.map(o => `<tr><td>#${o.id}</td><td>${o.user_name}</td><td>${o.total_amount.toLocaleString()} ₽</td><td>${getStatusBadge(o.status)}</td><td>${o.created_at}</td></tr>`).join('')}</tbody></table></div>`;
+                break;
+            case 'users':
+                adminContent.innerHTML = `<div class="top-bar"><h1 class="page-title">👥 Пользователи</h1><div class="user-info"><span>Администратор</span><div class="avatar">A</div></div></div><div class="data-table"><table><thead><tr><th>ID</th><th>Email</th><th>Имя</th><th>Роль</th></tr></thead><tbody>${mockUsers.map(u => `<tr><td>${u.id}</td><td>${u.email}</td><td>${u.name}</td><td>${u.role === 'admin' ? '👑 Админ' : '👤 Пользователь'}</td></tr>`).join('')}</tbody></table></div>`;
+                break;
+            case 'reports':
+            case 'orders':
+            case 'forms':
+                adminContent.innerHTML = `<div class="top-bar"><h1 class="page-title">${page === 'reports' ? '📈 Отчёты' : page === 'orders' ? '📦 Заказы' : '📝 Формы'}</h1><div class="user-info"><span>Администратор</span><div class="avatar">A</div></div></div><div class="stat-card"><p style="padding:40px;text-align:center;">Страница "${page}" в разработке</p></div>`;
+                break;
+            default:
+                adminContent.innerHTML = `<div class="top-bar"><h1 class="page-title">Страница не найдена</h1></div>`;
+        }
+    }
+
     // ========== ИНИЦИАЛИЗАЦИЯ ==========
     document.addEventListener('DOMContentLoaded', () => {
         addAdminStyles();
         renderAdminPanel();
+        updateMockCartCounter();
         
-        // Обработка кликов по меню
         document.querySelectorAll('.admin-sidebar a').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const page = link.getAttribute('data-page');
-                if (page) {
+                if (page && page !== 'logout') {
                     const newUrl = `${window.location.pathname}?page=${page}`;
                     window.history.pushState({}, '', newUrl);
                     renderAdminPanel();
+                } else if (page === 'logout') {
+                    sessionStorage.removeItem('devmode');
+                    location.reload();
                 }
             });
         });
     });
+    
+    window.updateCartCounter = updateMockCartCounter;
 })();
