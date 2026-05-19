@@ -4,8 +4,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const productId = urlParams.get('id');
     const container = document.getElementById('productDetail');
     
-    console.log('product.js запущен, ID товара:', productId);
-    
     if (!productId) {
         container.innerHTML = '<p class="error">Товар не указан</p>';
         return;
@@ -50,52 +48,55 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch(`/api/product.php?id=${productId}`);
         const product = await response.json();
         
-        console.log('Получен товар:', product);
-        
         if (product.error) {
             container.innerHTML = `<p class="error">${product.error}</p>`;
             return;
         }
         
-        // Обновляем заголовок страницы
         document.title = `${product.name} – Кондитерская фабрика`;
         
-        let wholesaleHtml = '';
-        if (product.wholesale_min_qty > 0 && product.wholesale_discount > 0) {
-            const wholesalePrice = Math.round(product.price * (100 - product.wholesale_discount) / 100);
-            wholesaleHtml = `
-                <div class="product-wholesale-info">
-                    <span class="wholesale-badge">Оптовая скидка ${product.wholesale_discount}%</span>
-                    <p class="wholesale-condition">При заказе от ${product.wholesale_min_qty} шт — цена ${wholesalePrice} ₽ за штуку</p>
-                </div>
-            `;
+        // Определяем следующую сладость (для навигации)
+        const nextId = parseInt(productId) + 1;
+        const totalProducts = 4;
+        let nextLink = '';
+        if (nextId <= totalProducts) {
+            let nextName = '';
+            if (nextId === 2) nextName = 'Медовый луг';
+            if (nextId === 3) nextName = 'Морской бриз';
+            if (nextId === 4) nextName = 'Бабушкины сказки';
+            nextLink = `<hr><a class="next-a" href="/product.html?id=${nextId}">следующая сладость →</a>`;
+        } else {
+            nextLink = `<hr><a class="next-a" href="/product.html?id=1">в начало →</a>`;
         }
         
-        // Экранируем описание
-        const description = (product.description || 'Описание отсутствует').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        
+        // Генерируем HTML в старой структуре
         const html = `
-            <div class="candy-container">
-                <div class="candy-left">
-                    <img src="${product.image || '/img/products/default.jpg'}" alt="${product.name}" onerror="this.src='/img/products/default.jpg'">
-                </div>
-                <div class="candy-right">
-                    <div class="candy-section-title">${product.name}</div>
-                    <div class="candy-description">
-                        <h3>Цена: ${product.price} ₽</h3>
-                        ${product.wholesale_min_qty > 0 ? `<p>Опт: от ${product.wholesale_min_qty} шт — скидка ${product.wholesale_discount}%</p>` : ''}
-                        <h3>Описание</h3>
-                        <p>${description}</p>
+            <section class="candy-section">
+                <div class="candy-container">
+                    <div class="candy-left">
+                        <img src="${product.image || '/img/products/default.jpg'}" alt="${product.name}" onerror="this.src='/img/products/default.jpg'">
                     </div>
-                    <div class="product-detail-actions">
-                        <div class="quantity-selector">
-                            <label for="productQuantity">Количество:</label>
-                            <input type="number" id="productQuantity" min="1" value="1">
+                    <div class="candy-right">
+                        <div class="candy-section-title">«${product.name}»</div>
+                        <div class="candy-description">
+                            <h3>Цена: ${product.price} ₽</h3>
+                            ${product.wholesale_min_qty > 0 ? `<p><strong>Оптовая скидка ${product.wholesale_discount}%</strong> — при заказе от ${product.wholesale_min_qty} шт</p>` : ''}
+                            
+                            <div class="product-buy-block">
+                                <div class="quantity-selector">
+                                    <label for="productQuantity">Количество:</label>
+                                    <input type="number" id="productQuantity" min="1" value="1">
+                                </div>
+                                <button id="addToCartBtn" class="add-to-cart-btn">Добавить в корзину</button>
+                            </div>
+                            
+                            <h3>Полное описание</h3>
+                            ${product.full_description || '<p>Описание отсутствует</p>'}
                         </div>
-                        <button id="addToCartBtn" class="add-to-cart-btn">Добавить в корзину</button>
                     </div>
                 </div>
-            </div>
+                ${nextLink}
+            </section>
         `;
         
         container.innerHTML = html;

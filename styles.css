@@ -909,6 +909,55 @@ form input {
   text-align: center;
   text-decoration: none;
 }
+
+
+.product-buy-block {
+    background: #fff8e8;
+    padding: 20px;
+    border-radius: 16px;
+    margin: 20px 0;
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.quantity-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quantity-selector label {
+    font-weight: 600;
+    color: #2c1810;
+}
+
+#productQuantity {
+    width: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.add-to-cart-btn {
+    background: #a3222f;
+    color: white;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.add-to-cart-btn:hover {
+    background: #7e1924;
+    transform: scale(1.02);
+}
 /*#endregion */
 
 /*#region media */

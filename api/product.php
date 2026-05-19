@@ -10,7 +10,7 @@ if ($id <= 0) {
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT id, name, price, wholesale_min_qty, wholesale_discount, image, description FROM products WHERE id = ?");
+$stmt = $pdo->prepare("SELECT id, name, price, wholesale_min_qty, wholesale_discount, image, description, full_description FROM products WHERE id = ?");
 $stmt->execute([$id]);
 $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
