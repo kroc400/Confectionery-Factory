@@ -4,13 +4,16 @@ $data = json_decode(file_get_contents('php://input'), true);
 $user_id = $_GET['user_id'] ?? $data['user_id'] ?? null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Получение корзины с расчетом оптовой цены
     $stmt = $pdo->prepare("
         SELECT c.product_id, c.quantity, p.name, p.price, p.wholesale_min_qty, p.wholesale_discount,
                CASE 
-                   WHEN c.quantity >= p.wholesale_min_qty THEN p.price * (100 - p.wholesale_discount) / 100
+                   WHEN c.quantity >= p.wholesale_min_qty THEN ROUND(p.price * (100 - p.wholesale_discount) / 100, 2)
                    ELSE p.price
-               END as final_price
+               END as final_price,
+               ROUND(CASE 
+                   WHEN c.quantity >= p.wholesale_min_qty THEN p.price * c.quantity - (p.price * (100 - p.wholesale_discount) / 100 * c.quantity)
+                   ELSE 0
+               END, 2) as discount_amount
         FROM cart c
         JOIN products p ON c.product_id = p.id
         WHERE c.user_id = ?
@@ -18,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $stmt->execute([$user_id]);
     $cart = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($cart);
+    exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

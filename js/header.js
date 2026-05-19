@@ -58,17 +58,32 @@ function initBurgerMenu() {
     }, 0);
 }
 
-function updateCartCounter() {
+// Функция обновления счётчика корзины (считает количество позиций, а не единиц товара)
+window.updateCartCounter = async function() {
     const userId = localStorage.getItem('userId');
-    if (!userId) return;
-    fetch(`/api/cart.php?user_id=${userId}`)
-        .then(res => res.json())
-        .then(cart => {
-            const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const counterSpan = document.getElementById('cartCount');
-            if (counterSpan) counterSpan.textContent = total;
-        });
+    const counterSpan = document.getElementById('cartCount');
+    
+    if (!userId) {
+        if (counterSpan) counterSpan.textContent = '0';
+        return;
     }
+    
+    try {
+        const response = await fetch(`/api/cart.php?user_id=${userId}`);
+        const cart = await response.json();
+        // Считаем КОЛИЧЕСТВО ПОЗИЦИЙ (разных товаров), а не общее количество единиц
+        const itemCount = cart.length;
+        if (counterSpan) counterSpan.textContent = itemCount;
+    } catch (err) {
+        console.error('Ошибка обновления счётчика корзины:', err);
+        if (counterSpan) counterSpan.textContent = '0';
+    }
+};
+
+// Вызываем при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.updateCartCounter) window.updateCartCounter();
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     // Проверяем, есть ли уже header с нужной структурой
