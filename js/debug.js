@@ -243,5 +243,10 @@
         });
     });
     
-    window.updateCartCounter = updateMockCartCounter;
+    // Обновляем счётчик только в dev-режиме, но не перезаписываем функцию
+    if (isDev) {
+        window.updateCartCounter = updateMockCartCounter;
+    } else {
+        console.log('[DEBUG] Обычный режим, используем оригинальный updateCartCounter');
+    }
 })();

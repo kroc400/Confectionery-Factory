@@ -124,16 +124,26 @@
         </section>
     </footer>
 
-    <script src="js/debug.js" type="module"></script>
+    <!-- СНАЧАЛА загружаем header.js (он создаёт структуру) -->
     <script src="js/header.js" type="module"></script>
+
+    <!-- ПОТОМ debug.js (НЕ должен перезаписывать updateCartCounter в обычном режиме) -->
+    <script src="js/debug.js" type="module"></script>
+
+    <!-- Остальные скрипты -->
     <script src="js/backToTop.js" type="module"></script>
     <script src="js/imageSlider.js" type="module"></script>
     <script src="js/burger.js" type="module"></script>
-    
+
     <!-- Загрузка товаров -->
     <script type="module">
         import { loadProducts } from './js/loadProducts.js';
         loadProducts('#productsContainer');
+        
+        // Обновляем счётчик после загрузки
+        if (window.updateCartCounter) {
+            setTimeout(() => window.updateCartCounter(), 100);
+        }
     </script>
 </body>
 </html>

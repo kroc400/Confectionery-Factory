@@ -80,18 +80,13 @@ window.updateCartCounter = async function() {
     }
 };
 
-// Вызываем при загрузке страницы
-document.addEventListener('DOMContentLoaded', () => {
-    if (window.updateCartCounter) window.updateCartCounter();
-});
-
+// ОДИН обработчик на всё
 document.addEventListener('DOMContentLoaded', () => {
     // Проверяем, есть ли уже header с нужной структурой
     const existingHeader = document.querySelector('header.header');
     const existingBurger = document.querySelector('.burger-menu');
     
     if (!existingHeader) {
-        // Если нет header с классом header, заменяем всё
         const oldHeader = document.querySelector('header');
         if (oldHeader) {
             const content = template.content.cloneNode(true);
@@ -100,11 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.insertAdjacentHTML('afterbegin', template.innerHTML);
         }
         initBurgerMenu();
-        updateCartCounter();
     } else {
-        // Если header уже есть, просто инициализируем бургер
         initBurgerMenu();
-        updateCartCounter();
+    }
+    
+    // Обновляем счётчик
+    if (window.updateCartCounter) {
+        window.updateCartCounter();
     }
 });
 
