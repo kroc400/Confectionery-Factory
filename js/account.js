@@ -146,10 +146,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Кнопка перехода в админ-панель
     if (adminPanelBtn) {
-        adminPanelBtn.addEventListener('click', () => {
-            window.location.href = '/api/admin/admin.php';
-        });
-    }
+    adminPanelBtn.addEventListener('click', () => {
+        window.location.href = '/api/admin/admin.php';
+    });
+}
 
     // Проверка существующей сессии
     const userId = localStorage.getItem('userId');

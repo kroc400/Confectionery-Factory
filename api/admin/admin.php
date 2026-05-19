@@ -6,16 +6,29 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 }
 require_once '../db.php';
 
-// Проверка авторизации через сессию (для входа из админки)
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    // Если нет сессии, проверяем, не залогинен ли пользователь через основную авторизацию
-    // (для перехода из account.html)
-    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-    // В реальном проекте здесь была бы проверка токена
-    // Для простоты перенаправляем на логин
+// ========== АВТОРИЗАЦИЯ ЧЕРЕЗ РОЛЬ ИЗ АККАУНТА ==========
+// Проверяем, авторизован ли пользователь через основную систему
+$userId = $_SESSION['user_id'] ?? null;
+
+if (!$userId) {
+    // Если нет сессии, проверяем через куки/токен из localStorage
+    // Для простоты перенаправляем на логин, если нет прав
     header('Location: login.php');
     exit;
 }
+
+// Получаем роль пользователя из БД
+$stmt = $pdo->prepare("SELECT role FROM users WHERE id = ?");
+$stmt->execute([$userId]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user || $user['role'] !== 'admin') {
+    die('Доступ запрещён. Только для администраторов.');
+}
+
+// Устанавливаем сессию админа
+$_SESSION['admin_logged_in'] = true;
+$_SESSION['admin_user_id'] = $userId;
 
 // ========== УСЛОВНЫЕ КОНСТРУКЦИИ PHP (if, elseif, else) ==========
 $page = $_GET['page'] ?? 'dashboard';

@@ -35,6 +35,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && password_verify($data['password'], $user['password'])) {
             unset($user['password']);
             echo json_encode(['success' => true, 'user' => $user]);
+
+            session_start();
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_role'] = $user['role'];
+            $_SESSION['user_name'] = $user['name'];
         } else {
             echo json_encode(['error' => 'Неверный email или пароль']);
         }

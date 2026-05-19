@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - Дизайн прототип</title>
+    <style>
+        /* ========== ОСНОВНЫЕ СТИЛИ ДЛЯ АДМИНКИ ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        /* АДМИН-КОНТЕЙНЕР */
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* САЙДБАР */
+        .admin-sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 25px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 0 20px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .admin-sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            padding: 12px 24px;
+            margin: 4px 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .admin-sidebar a:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .admin-sidebar a.active {
+            background: #a3222f;
+            color: white;
+        }
+
+        /* ОСНОВНОЙ КОНТЕНТ */
+        .admin-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Сайдбар -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2>🍬 Сладость веков</h2>
+                <p>Админ-панель</p>
+            </div>
+            <a data-page="dashboard">📊 Панель управления</a>
+            <a data-page="reports">📈 Отчёты</a>
+            <a data-page="users">👥 Пользователи</a>
+            <a data-page="orders">📦 Заказы</a>
+            <a data-page="forms">📝 Формы (ЛР №11)</a>
+            <a data-page="logout" style="margin-top: 50px;">🚪 Выход</a>
+        </aside>
+        
+        <!-- Контент будет заполнен через debug.js -->
+        <main class="admin-content"></main>
+    </div>
+
+    <!-- Подключаем debug.js -->
+    <script src="js/debug.js"></script>
+</body>
+</html>
