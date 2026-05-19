@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">Товар – Кондитерская фабрика</title>
+    <title>Наша продукция – Кондитерская фабрика</title>
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
     <header></header>
 
     <main class="content">
-        <section class="product-detail-section">
-            <div class="product-detail-container" id="productDetail">
-                <div class="loading">Загрузка товара...</div>
+        <section class="products-section">
+            <div class="products-container">
+                <!-- Сюда динамически подгрузятся товары из БД -->
             </div>
         </section>
     </main>
 
     <footer></footer>
 
-    <script src="backToTop.js"></script>
-    <script src="header.js" type="module"></script>
-    <script src="footer.js" type="module"></script>
-    <script src="js/product.js" type="module"></script>
+    <!-- ВАЖНО: все скрипты должны быть с type="module" или все без -->
+    <script src="js/backToTop.js" type="module"></script>
+    <script src="js/header.js" type="module"></script>
+    <script src="js/footer.js" type="module"></script>
+    <script src="js/products.js" type="module"></script>
 </body>
 </html>
