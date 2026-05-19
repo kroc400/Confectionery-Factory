@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет – Кондитерская фабрика</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- header и footer будут подгружены скриптами -->
+    <main class="account-page">
+        <div class="container">
+            <div id="authSection" class="auth-section">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="login">Вход</button>
+                    <button class="tab-btn" data-tab="register">Регистрация</button>
+                </div>
+                <div id="loginForm" class="tab-content active">
+                    <form id="loginFormElement">
+                        <input type="email" id="loginEmail" placeholder="Email" required>
+                        <input type="password" id="loginPassword" placeholder="Пароль" required>
+                        <button type="submit">Войти</button>
+                    </form>
+                </div>
+                <div id="registerForm" class="tab-content">
+                    <form id="registerFormElement">
+                        <input type="text" id="regName" placeholder="Имя" required>
+                        <input type="email" id="regEmail" placeholder="Email" required>
+                        <input type="password" id="regPassword" placeholder="Пароль" required>
+                        <input type="tel" id="regPhone" placeholder="Телефон">
+                        <button type="submit">Зарегистрироваться</button>
+                    </form>
+                </div>
+            </div>
+            <div id="accountSection" style="display: none;">
+                <h2>Добро пожаловать, <span id="userName"></span>!</h2>
+                <div class="orders-history">
+                    <h3>История заказов</h3>
+                    <div id="ordersList"></div>
+                </div>
+                <button id="logoutBtn">Выйти</button>
+            </div>
+        </div>
+    </main>
+    <script src="js/header.js" type="module"></script>
+    <script src="js/footer.js" type="module"></script>
+    <script src="js/account.js" type="module"></script>
+</body>
+</html>

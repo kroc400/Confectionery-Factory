@@ -8,6 +8,10 @@ template.innerHTML = `
         </div>
 
         <div class="hd-right">
+            <div class="hd-icons">
+                <a href="/cart.html" class="hd-icon cart-icon">🛒<span class="cart-count" id="cartCount">0</span></a>
+                <a href="/account.html" class="hd-icon account-icon">👤</a>
+            </div>
             <div class="hd-burger">
                 <span></span>
                 <span></span>
@@ -54,6 +58,18 @@ function initBurgerMenu() {
     }, 0);
 }
 
+function updateCartCounter() {
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
+    fetch(`/api/cart.php?user_id=${userId}`)
+        .then(res => res.json())
+        .then(cart => {
+            const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const counterSpan = document.getElementById('cartCount');
+            if (counterSpan) counterSpan.textContent = total;
+        });
+    }
+
 document.addEventListener('DOMContentLoaded', () => {
     // Проверяем, есть ли уже header с нужной структурой
     const existingHeader = document.querySelector('header.header');
@@ -69,9 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.insertAdjacentHTML('afterbegin', template.innerHTML);
         }
         initBurgerMenu();
+        updateCartCounter();
     } else {
         // Если header уже есть, просто инициализируем бургер
         initBurgerMenu();
+        updateCartCounter();
     }
 });
 

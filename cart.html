@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина – Кондитерская фабрика</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="cart-page">
+        <div class="container">
+            <h1>Корзина</h1>
+            <div id="cartItems" class="cart-items">
+                <!-- динамически -->
+            </div>
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Итого без скидки:</span>
+                    <span id="subtotal">0 ₽</span>
+                </div>
+                <div class="summary-row discount-row">
+                    <span>Оптовая скидка:</span>
+                    <span id="discount">0 ₽</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>Итого к оплате:</span>
+                    <span id="total">0 ₽</span>
+                </div>
+                <button id="checkoutBtn" class="checkout-btn">Оформить заказ</button>
+            </div>
+        </div>
+    </main>
+    <script src="js/header.js" type="module"></script>
+    <script src="js/footer.js" type="module"></script>
+    <script src="js/cart.js" type="module"></script>
+</body>
+</html>
