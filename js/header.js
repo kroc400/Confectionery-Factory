@@ -1,3 +1,4 @@
+// js/header.js
 const template = document.createElement('template');
 template.innerHTML = `
     <header class="header">
@@ -41,7 +42,6 @@ function initBurgerMenu() {
         const burgerMenu = document.querySelector('.burger-menu');
         
         if (burgerBtn && burgerMenu) {
-            // Убираем cloneNode, чтобы сохранить позиционирование
             burgerBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -58,10 +58,12 @@ function initBurgerMenu() {
     }, 0);
 }
 
-// Функция обновления счётчика корзины (считает количество позиций, а не единиц товара)
+// ========== ФУНКЦИЯ ОБНОВЛЕНИЯ СЧЁТЧИКА ==========
 window.updateCartCounter = async function() {
     const userId = localStorage.getItem('userId');
     const counterSpan = document.getElementById('cartCount');
+    
+    console.log('🔄 updateCartCounter вызван, userId:', userId);
     
     if (!userId) {
         if (counterSpan) counterSpan.textContent = '0';
@@ -70,21 +72,40 @@ window.updateCartCounter = async function() {
     
     try {
         const response = await fetch(`/api/cart.php?user_id=${userId}`);
-        const cart = await response.json();
-        // Считаем КОЛИЧЕСТВО ПОЗИЦИЙ (разных товаров), а не общее количество единиц
-        const itemCount = cart.length;
-        if (counterSpan) counterSpan.textContent = itemCount;
+        const data = await response.json();
+        
+        console.log('📦 Данные из API:', data);
+        
+        // Определяем общее количество товаров
+        let totalItems = 0;
+        
+        if (Array.isArray(data)) {
+            // Если API вернуло массив
+            totalItems = data.reduce((sum, item) => sum + (item.quantity || 0), 0);
+        } else if (data.items && Array.isArray(data.items)) {
+            // Если API вернуло объект с полем items
+            totalItems = data.items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+        } else if (data.summary && data.summary.total) {
+            // Если API вернуло итоговую сумму
+            totalItems = data.items?.length || 0;
+        }
+        
+        if (counterSpan) {
+            counterSpan.textContent = totalItems;
+            console.log('✅ Счётчик обновлён:', totalItems);
+        }
     } catch (err) {
-        console.error('Ошибка обновления счётчика корзины:', err);
+        console.error('❌ Ошибка обновления счётчика:', err);
         if (counterSpan) counterSpan.textContent = '0';
     }
 };
 
-// ОДИН обработчик на всё
+// ========== ИНИЦИАЛИЗАЦИЯ ==========
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('📄 header.js: DOM загружен');
+    
     // Проверяем, есть ли уже header с нужной структурой
     const existingHeader = document.querySelector('header.header');
-    const existingBurger = document.querySelector('.burger-menu');
     
     if (!existingHeader) {
         const oldHeader = document.querySelector('header');
@@ -99,12 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
         initBurgerMenu();
     }
     
-    // Обновляем счётчик
-    if (window.updateCartCounter) {
-        window.updateCartCounter();
-    }
+    // ОБНОВЛЯЕМ СЧЁТЧИК СРАЗУ ПОСЛЕ ЗАГРУЗКИ
+    setTimeout(() => {
+        if (window.updateCartCounter) {
+            window.updateCartCounter();
+        }
+    }, 100);
 });
-
-window.updateCartCounter = updateCartCounter;
 
 export {};
