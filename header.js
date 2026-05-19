@@ -93,4 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+window.updateCartCounter = updateCartCounter;
+
 export {};
