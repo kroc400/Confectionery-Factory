@@ -299,7 +299,13 @@ header {
   width: auto;
 }
 
-.hd-right
+.hd-right{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+
 .hd-burger{
   width: 40px;
   height: 40px;
