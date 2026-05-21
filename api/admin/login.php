@@ -39,10 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Вход в админ-панель</title>
     <link rel="stylesheet" href="../../styles.css">
     <style>
-        .admin-login { max-width: 400px; margin: 100px auto; padding: 30px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .admin-login { max-width: 400px; margin: 100px auto; padding: 30px; background: white; }
         .admin-login h1 { text-align: center; color: #a3222f; }
-        .admin-login input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
-        .admin-login button { width: 100%; padding: 12px; background: #a3222f; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        .admin-login input { width: 100%; padding: 10px; margin: 10px 0;}
+        .admin-login button { width: 100%; padding: 12px; background: #a3222f; color: white; border: none; }
         .error { color: red; text-align: center; margin-top: 10px; }
     </style>
 </head>
