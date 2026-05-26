@@ -4,62 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles.css">
-    <title></title>
+    <title>Сладость веков – Кондитерская фабрика</title>
 </head>
 <body>
-    <!-- <header>
-        <div class="logo-container">
-            <a class="header-logo" href="/">
-                <img src="/img/logo.png">
-            </a>
-        </div>
-
-        <div class="hd-right">
-            <div class="hd-burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </header>
-
-    <div class="burger-menu">
-        <div class="burger-container">
-            <div class="burger-column">
-                <ul>
-                    <li><a href="brandHistory.html">История бренда</a></li>
-                    <li><a href="products.html">Наша продукция</a></li>
-                    <li><a href="qualityAndIngredients.html">Качество и ингредиенты</a></li>
-                    <li><a href="FAQ.html">Часто задаваемые вопросы</a></li>
-                </ul>
-
-                <div class="divic">Продукты, любимые с детства</div>
-            </div>
-        </div>
-    </div> -->
-
+    <!-- Header будет создан через header.js -->
     <header></header>
 
-    
-
     <main class="content">
-<!-- #region banner -->
+        <!-- #region banner -->
         <div class="slider-container">
             <div class="slider-track">
                 <div class="slide">
-                    <img src="./img/main-banner/main-banner.jfif">
+                    <img src="./img/main-banner/main-banner.jfif" alt="Баннер 1">
                 </div>
                 <div class="slide">
-                    <img src="./img/main-banner/slide2.jfif">
+                    <img src="./img/main-banner/slide2.jfif" alt="Баннер 2">
                 </div>
                 <div class="slide">
-                    <img src="./img/main-banner/slide3.jfif">
+                    <img src="./img/main-banner/slide3.jfif" alt="Баннер 3">
                 </div>
                 <div class="slide">
-                    <img src="./img/main-banner/slide4.jfif">
+                    <img src="./img/main-banner/slide4.jfif" alt="Баннер 4">
                 </div>
                 <div class="slide">
-                    <img src="./img/main-banner/slide5.jfif">
+                    <img src="./img/main-banner/slide5.jfif" alt="Баннер 5">
                 </div>
             </div>
             
@@ -74,27 +42,26 @@
                 <span class="dot"></span>
             </div>
         </div>
-<!--#endregion -->
+        <!--#endregion -->
 
-<!--#region brand info -->
+        <!-- #region brand info -->
         <section class="brand-info-section">
             <div class="brand-info-container">
                 <div class="brand-info-left">
-                    <H3>О бренде Сладость веков</H3>
+                    <h3>О бренде Сладость веков</h3>
                     <a href="brandHistory.html">Узнать больше</a> 
                 </div>
                 <div class="brand-info-right">
                     Основано в 1925 году. Одно из старейших кондитерских предприятий страны, где традиции мастерства воплощаются в каждом изделии.
-                </div>
-                   
+                </div>     
             </div>
         </section>
-<!--#endregion -->
+        <!--#endregion -->
 
-<!--#region brand-lozung-section -->
+        <!-- #region brand-lozung-section -->
         <section class="brand-lozung-section">
             <div class="brand-lozung-container">
-                <H3>Любимые продукты высшего качества</H3>
+                <h3>Любимые продукты высшего качества</h3>
                 <div class="brand-lozung-text">
                     Вкус наших конфет пробуждает самые светлые воспоминания:
                     первый школьный праздник, семейное чаепитие,
@@ -107,8 +74,9 @@
                 </div>
             </div>
         </section>
-<!--#endregion  -->
+        <!--#endregion  -->
         
+        <!-- ТОВАРЫ ЗАГРУЖАЮТСЯ ДИНАМИЧЕСКИ -->
         <section class="products-section">
             <div class="products-container">
                 
@@ -161,8 +129,6 @@
                 </div>
             </div>
         </section>
-
-
     </main>
         
     <footer>
@@ -170,7 +136,7 @@
             <div class="footer-container">
                 <div class="left-column">
                     <div class="footer-info">
-                        <img src="/img/logo.png">
+                        <img src="/img/logo.png" alt="Логотип">
                         Фабрика Сладость веков
                     </div>
                 </div>
@@ -186,10 +152,10 @@
         </section>
     </footer>
 
+    <!-- ВАЖНО: ВСЕ СКРИПТЫ С type="module" -->
     <script src="js/header.js" type="module"></script>
-    <script src="backToTop.js"></script>
-    <script src="imageSlider.js"></script>
-    <script src="burger.js"></script>
-
+    <script src="js/backToTop.js" type="module"></script>
+    <script src="js/imageSlider.js" type="module"></script>
+    <script src="js/burger.js" type="module"></script>
 </body>
 </html>

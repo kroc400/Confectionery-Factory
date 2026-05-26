@@ -8,6 +8,66 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logoutBtn');
     const adminPanelBtn = document.getElementById('adminPanelBtn');
 
+    // ========== CAPTCHA ПЕРЕМЕННЫЕ И ФУНКЦИИ ==========
+    let currentCaptcha = { question: '', answer: '' };
+
+    // Генерация CAPTCHA (арифметический пример)
+    function generateCaptcha() {
+        const num1 = Math.floor(Math.random() * 10) + 1;
+        const num2 = Math.floor(Math.random() * 10) + 1;
+        const operators = ['+', '-', '*'];
+        const operator = operators[Math.floor(Math.random() * operators.length)];
+        
+        let answer;
+        switch(operator) {
+            case '+': answer = num1 + num2; break;
+            case '-': answer = num1 - num2; break;
+            case '*': answer = num1 * num2; break;
+            default: answer = num1 + num2;
+        }
+        
+        currentCaptcha = {
+            question: `${num1} ${operator} ${num2} = ?`,
+            answer: answer.toString()
+        };
+        
+        const captchaSpan = document.getElementById('captchaQuestion');
+        if (captchaSpan) captchaSpan.textContent = currentCaptcha.question;
+        
+        // Очищаем поле ввода и ошибку
+        const captchaInput = document.getElementById('captchaInput');
+        const captchaError = document.getElementById('captchaError');
+        if (captchaInput) captchaInput.value = '';
+        if (captchaError) captchaError.style.display = 'none';
+        
+        console.log('CAPTCHA сгенерирована:', currentCaptcha);
+    }
+
+    // Проверка CAPTCHA
+    function verifyCaptcha() {
+        const userAnswer = document.getElementById('captchaInput')?.value.trim();
+        const captchaError = document.getElementById('captchaError');
+        
+        if (!userAnswer) {
+            if (captchaError) {
+                captchaError.textContent = 'Введите ответ на капчу';
+                captchaError.style.display = 'block';
+            }
+            return false;
+        }
+        
+        if (userAnswer !== currentCaptcha.answer) {
+            if (captchaError) {
+                captchaError.textContent = 'Неверный ответ! Попробуйте ещё раз.';
+                captchaError.style.display = 'block';
+            }
+            generateCaptcha(); // Обновляем капчу при ошибке
+            return false;
+        }
+        
+        return true;
+    }
+
     // Переключение табов
     const tabBtns = document.querySelectorAll('.tab-btn');
     if (tabBtns.length === 0) {
@@ -21,15 +81,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.classList.add('active');
                 const targetForm = document.getElementById(`${tab}Form`);
                 if (targetForm) targetForm.classList.add('active');
+                
+                // При переключении на вкладку регистрации генерируем новую капчу
+                if (tab === 'register') {
+                    generateCaptcha();
+                }
             });
         });
     }
 
-    // Регистрация
+    // Регистрация (с проверкой CAPTCHA)
     const regForm = document.getElementById('registerFormElement');
     if (regForm) {
         regForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // ========== ПРОВЕРКА CAPTCHA ПЕРЕД ОТПРАВКОЙ ==========
+            if (!verifyCaptcha()) {
+                return; // Останавливаем отправку, если капча неверна
+            }
+            
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regEmail').value;
             const password = document.getElementById('regPassword').value;
@@ -146,15 +217,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Кнопка перехода в админ-панель
     if (adminPanelBtn) {
-    adminPanelBtn.addEventListener('click', () => {
-        window.location.href = '/api/admin/admin.php';
-    });
-}
+        adminPanelBtn.addEventListener('click', () => {
+            window.location.href = '/api/admin/admin.php';
+        });
+    }
+
+    // Обработчик обновления CAPTCHA
+    const refreshBtn = document.getElementById('refreshCaptcha');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            generateCaptcha();
+        });
+    }
 
     // Проверка существующей сессии
     const userId = localStorage.getItem('userId');
     if (userId) {
         showAccount(localStorage.getItem('userName'), localStorage.getItem('userRole'));
         loadOrders();
+    } else {
+        // Если нет сессии, генерируем CAPTCHA при загрузке страницы
+        generateCaptcha();
     }
 });

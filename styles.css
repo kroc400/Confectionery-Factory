@@ -497,6 +497,17 @@ form button {
 form button:hover {
     background: #b30000;
 }
+
+
+/* #region captcha */
+.captcha-refresh-block{
+    display: flex;
+}
+
+.captcha-refresh{
+    height: 100%;
+}
+/*#endregion */
 /*#endregion */
 /* Корзина */
 

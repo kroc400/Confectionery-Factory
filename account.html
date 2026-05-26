@@ -29,6 +29,22 @@
                         <input type="email" id="regEmail" placeholder="Email" required>
                         <input type="password" id="regPassword" placeholder="Пароль" required>
                         <input type="tel" id="regPhone" placeholder="Телефон">
+
+
+                        <div class="captcha-container">
+                            <div class="captcha-box">
+                                <span id="captchaQuestion" class="captcha-question"></span>
+                                
+                            </div>
+                            <div class="captcha-refresh-block">
+                                <input type="text" id="captchaInput" placeholder="Введите результат" required>
+                                <button type="button" id="refreshCaptcha" class="captcha-refresh" title="Обновить">Обновить</button>
+                            </div>
+                            
+                            <div id="captchaError" class="captcha-error" style="display: none;"></div>
+                        </div>
+
+
                         <button type="submit">Зарегистрироваться</button>
                     </form>
                 </div>
